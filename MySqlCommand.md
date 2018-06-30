@@ -88,4 +88,34 @@ CREATE TABLE `blog` (
   FOREIGN KEY (`user_id`) REFERENCES `user`(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 ```
-
+## 2. Thêm 1 dòng dữ liệu trong bất kỳ table nào
+```
+INSERT INTO `user` (`full_name`, `email`, `rank`, `is_active`, `created_at`) VALUES
+('Le Ba Vy', 'vy.le@asiantech.vn', 2, 1, '2018-06-17 17:00:00');
+```
+## 3.	Xoá và sửa 1 dòng dữ liệu trong bất kỳ table nào
+```
+UPDATE `blog` SET `title` = 'blog 2b' WHERE `blog`.`id` = 10;
+DELETE FROM `blog` WHERE `blog`.`id` = 10;
+```
+## 4.	Select 10 blog mới nhất đã active
+```
+SELECT * FROM `comment` WHERE `is_active` = 1 ORDER BY `id` DESC LIMIT 10;
+```
+## 5.	Lấy 5 blog từ blog thứ 10
+```
+SELECT * FROM `blog` ORDER BY `id` DESC LIMIT 9, 5;
+```
+## 6.	Set is_active = 0 của user có id = 3 trong bảng user
+```
+UPDATE `user` SET `is_active` = 0 WHERE `user`.`id` = 3;
+```
+## 7.	Xoá tất cả comment của user = 2 trong blog = 5
+```
+DELETE FROM `comment` WHERE `comment`.`user_id` = 2 AND `comment`.`target_table` ='blog' AND 	`comment`.`target_id` = 5;
+```
+## 8.	Lấy 3 blog bất kỳ (random)
+```
+SELECT * FROM `blog` ORDER BY RAND() LIMIT 3;
+```
+## 9.	Lấy số lượng comment của các blog
