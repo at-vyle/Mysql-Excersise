@@ -119,3 +119,16 @@ DELETE FROM `comment` WHERE `comment`.`user_id` = 2 AND `comment`.`target_table`
 SELECT * FROM `blog` ORDER BY RAND() LIMIT 3;
 ```
 ## 9.	Lấy số lượng comment của các blog
+```
+SELECT `target_table`, `target_id`, COUNT(`id`) as SL FROM comment 
+WHERE `target_tabl`e='blog'
+GROUP BY `target_id`, `target_table`;
+```
+## 10.	Lấy Category có tồn tại blog hoặc news đã active (không được lặp lại category)
+```
+SELECT * FROM category
+WHERE category.id IN (SELECT blog.category_id FROM blog WHERE blog.is_active =1)
+		OR category.id IN (SELECT news.category_id FROM news WHERE news.is_active =1) ;
+```
+## 11.	Lấy tổng lượt view của từng category thông qua blog và news
+```
