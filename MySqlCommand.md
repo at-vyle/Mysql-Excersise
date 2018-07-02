@@ -278,9 +278,4 @@ INNER JOIN blog ON user.id = blog.user_id
 INNER JOIN category ON category.id = blog.category_id
 WHERE user.fullname = "Khiêu";
 ```
-## 33. Liệt kê email user các user có tên(user.full_name) có chứa ký tự "Khi" theo danh sách như output bên dưới.
-```
-SELECT GROUP_CONCAT(full_name SEPARATOR ';') AS fullname FROM user
-WHERE full_name like "%Khi%";
-```
  
