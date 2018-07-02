@@ -132,3 +132,26 @@ WHERE category.id IN (SELECT blog.category_id FROM blog WHERE blog.is_active =1)
 ```
 ## 11.	Lấy tổng lượt view của từng category thông qua blog và news
 ```
+SELECT view.id, SUM(view.ViewCat) FROM 
+(
+	SELECT news.category_id AS id, SUM(news.view) AS viewCat FROM news GROUP BY news.id
+   UNION
+   SELECT blog.category_id AS id, SUM(blog.view)  AS viewCat FROM blog GROUP BY blog.id
+) AS view GROUP BY view.id
+```
+## 12.	Lấy blog được tạo bởi user mà user này không có bất kỳ comment ở blog
+```
+SELECT blog.*
+FROM blog
+INNER JOIN comment ON blog.id = comment.target_id
+WHERE comment.target_table = 'blog'
+  AND blog.user_id != comment.user_id;
+```
+## 13.	Lấy 5 blog mới nhất và số lượng comment cho từng blog
+```
+SELECT blog.id, COUNT(comment.id) AS CM
+FROM blog
+INNER JOIN comment ON blog.id = comment.target_id
+WHERE comment.target_table = 'blog' GROUP BY blog.id ORDER BY blog.id DESC LIMIT 5
+```
+## 14.	Lấy 3 User comment đầu tiên trong 5 blogs mới nhất
