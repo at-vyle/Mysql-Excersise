@@ -155,3 +155,39 @@ INNER JOIN comment ON blog.id = comment.target_id
 WHERE comment.target_table = 'blog' GROUP BY blog.id ORDER BY blog.id DESC LIMIT 5
 ```
 ## 14.	Lấy 3 User comment đầu tiên trong 5 blogs mới nhất
+```
+```
+## 15.	Update rank user = 2 khi tổng số lượng comment của user > 20
+```
+UPDATE user SET user.rank = 2 WHERE user.id IN 
+(
+	SELECT cm.id FROM 
+	(
+		SELECT comment.user_id AS id, COUNT(comment.user_id) AS sumCMT FROM comment GROUP BY comment.user_id
+	) AS cm WHERE cm.sumCMT > 1 
+)
+ ```
+ ## 16.	Xoá comment mà nội dung comment có từ "fuck" hoặc "phức"
+ ```
+ DELETE FROM comment WHERE comment.comment LIKE '%fuck%' OR '%phức%'
+ ```
+ ## 17.	Select 10 blog mới nhất được tạo bởi các user active
+ ```
+ SELECT blog.* FROM blog INNER JOIN user ON user.id = blog.user_id WHERE user.is_active = 1 ORDER BY blog.id DESC
+ ```
+ ## 18.	Lấy số lượng Blog active của user có id là 1,2,4
+ ```
+ SELECT blog.user_id, COUNT(blog.id) FROM blog WHERE blog.is_active = 1 AND blog.user_id IN (1,2,4) GROUP BY blog.user_id
+ ```
+ ## 19.	Lấy 5 blog và 5 news của 1 category bất kỳ
+ ```
+ ```
+ ## 20.	Lấy blog và news có lượt view nhiều nhất
+ ```
+SELECT blog.title AS title, MAX(blog.view) AS view FROM blog
+UNION
+SELECT  news.title AS title, MAX(news.view) AS view FROM news
+```
+### 21.	Lấy blog được tạo trong 3 ngày gần nhất
+
+ 
