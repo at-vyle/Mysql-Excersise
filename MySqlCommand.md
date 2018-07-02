@@ -181,6 +181,14 @@ UPDATE user SET user.rank = 2 WHERE user.id IN
  ```
  ## 19.	Lấy 5 blog và 5 news của 1 category bất kỳ
  ```
+ SET @id_rand = (SELECT id FROM category ORDER BY RAND() LIMIT 1)
+(SELECT * FROM blog
+WHERE category_id = @id_rand
+LIMIT 5)
+UNION
+(SELECT * FROM news
+WHERE category_id = @id_rand
+LIMIT 5);
  ```
  ## 20.	Lấy blog và news có lượt view nhiều nhất
  ```
@@ -189,5 +197,90 @@ UNION
 SELECT  news.title AS title, MAX(news.view) AS view FROM news
 ```
 ## 21.	Lấy blog được tạo trong 3 ngày gần nhất
-
+```
+SELECT * FROM blog WHERE created_at > CURRENT_DATE() - 3;
+```
+## 22.	Lấy danh sách user đã comment trong 2 blog mới nhất
+```
+SELECT * FROM user
+WHERE id IN (
+SELECT comment.* FROM comment WHERE comment.target_table ='blog' AND comment.target_id IN (
+SELECT blog.id FROM blog ORDER BY blog.id LIMIT 0,2));
+```
+## 23. Lấy 2 blog, 2 news mà user có id = 1 đã comment
+```
+(SELECT blog.id, blog.category_id,blog.title, blog.view, blog.is_active, blog.content, blog.created_at, blog.updated_at FROM blog
+WHERE id in (SELECT comment.target_id FROM comment WHERE comment.target_table ='blog' AND comment.user_id = 1)
+LIMIT 2)
+UNION
+(SELECT * FROM news
+WHERE id in (SELECT comment.target_id FROM comment WHERE comment.target_table ='news' AND comment.user_id = 1)
+LIMIT 2)
+```
+## 24. Lấy 1 blog và 1 news có số lượng comment nhiều nhất
+```
+(SELECT title, COUNT(comment.id) FROM blog
+INNER JOIN comment ON blog.id = comment.target_id WHERE comment.target_table = 'blog'
+GROUP BY title
+ORDER BY COUNT(comment.id)
+LIMIT 1)
+UNION
+(SELECT title, COUNT(comment.id) FROM news
+INNER JOIN comment ON news.id = comment.target_id WHERE comment.target_table = 'news'
+GROUP BY blog.id
+ORDER BY COUNT(comment.id)
+LIMIT 1);
+```
+## 25. Lấy 5 blog và 5 news mới nhất đã active
+```
+(SELECT blog.title FROM blog
+WHERE blog.is_active = 1
+ORDER BY blog.id DESC
+LIMIT 5)
+UNION
+(SELECT news.title FROM news
+WHERE news.is_active = 1
+ORDER BY news.id DESC
+LIMIT 5);
+```
+## 26. Lấy nội dung comment trong blog và news của user id =1
+```
+SELECT comment FROM comment
+WHERE user_id = 1;
+```
+## 27. Blog của user đang được user có id = 1 follow
+```
+SELECT * FROM blog WHERE blog.user_id IN (
+	SELECT follow.to_user_id FROM follow WHERE follow.from_user_id = 1)
+```
+## 28. Lấy số lượng user đang follow user = 1
+```
+SELECT COUNT(follow.from_user_id) FROM follow WHERE follow.to_user_id = 1 GROUP BY follow.to_user_id;
+```
+## 29. Lấy số lượng user 1 đang follow
+```
+SELECT COUNT(follow.to_user_id) FROM follow WHERE follow.from_user_id = 1 GROUP BY follow.from_user_id;
+```
+## 30. Lấy 1 comment (id_comment, comment) mới nhất và thông tin của user đang được follow bởi user 1
+```
+SELECT comment.id, comment.comment, user.full_name FROM comment, user
+WHERE comment.user_id IN (SELECT to_user_id FROM follow WHERE from_user_id = 1)
+ORDER BY comment.created_at DESC
+```
+## 31. Hiển thị một chuổi "PHP Team " + ngày giờ hiện tại (Ex: PHP Team 2017-06-21 13:06:37)
+```
+SELECT CONCAT("PHP TEAM ", CURRENT_TIMESTAMP());
+```
+## 32. Tìm có tên(user.full_name) "Khiêu" và các thông tin trên blog của user này như: (blog.title, blog.view), title category(category) của blog này.
+```
+SELECT user.full_name, blog.title, blog.view, category.title FROM user
+INNER JOIN blog ON user.id = blog.user_id
+INNER JOIN category ON category.id = blog.category_id
+WHERE user.fullname = "Khiêu";
+```
+## 33. Liệt kê email user các user có tên(user.full_name) có chứa ký tự "Khi" theo danh sách như output bên dưới.
+```
+SELECT GROUP_CONCAT(full_name SEPARATOR ';') AS fullname FROM user
+WHERE full_name like "%Khi%";
+```
  
