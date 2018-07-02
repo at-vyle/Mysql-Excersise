@@ -188,6 +188,6 @@ SELECT blog.title AS title, MAX(blog.view) AS view FROM blog
 UNION
 SELECT  news.title AS title, MAX(news.view) AS view FROM news
 ```
-### 21.	Lấy blog được tạo trong 3 ngày gần nhất
+## 21.	Lấy blog được tạo trong 3 ngày gần nhất
 
  
