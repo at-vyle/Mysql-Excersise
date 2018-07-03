@@ -156,6 +156,10 @@ WHERE comment.target_table = 'blog' GROUP BY blog.id ORDER BY blog.id DESC LIMIT
 ```
 ## 14.	Lấy 3 User comment đầu tiên trong 5 blogs mới nhất
 ```
+SELECT * FROM user WHERE id IN 
+	(SELECT user_id FROM comment WHERE target_table = 'blog' AND target_id IN (
+		SELECT id FROM blog ORDER BY created_at DESC LIMIT 5)
+	ORDER BY created_at DESC LIMIT 3);
 ```
 ## 15.	Update rank user = 2 khi tổng số lượng comment của user > 20
 ```
