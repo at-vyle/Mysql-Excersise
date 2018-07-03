@@ -285,7 +285,7 @@ SELECT GROUP_CONCAT(CONCAT_WS(',',user.email)) AS emails_user FROM user WHERE us
 ## 34. Tính điểm cho user có email là minh82@example.com trong bảng comment. Cách tính điểm:
  Trong bảng comment với taget_table = "blog" tính 1 điểm, taget_table = "news" tính 2 điểm.
 ```
-SET @blog = (SELECT COUNT(comment.target_table) FROM comment WHERE comment.target_table = 'blog' AND comment.user_id = 2);
-SET @news = (SELECT COUNT(comment.target_table) FROM comment WHERE comment.target_table = 'news' AND comment.user_id = 2);
+SET @blog = (SELECT COUNT(comment.target_table) FROM comment INNER JOIN user ON user.id = comment.user_id WHERE comment.target_table = 'blog' AND user.email = 'minh82@example.com');
+SET @news = (SELECT COUNT(comment.target_table) FROM comment INNER JOIN user ON user.id = comment.user_id WHERE comment.target_table = 'news' AND user.email = 'minh82@example.com');
 SELECT SUM(@blog + @news*2)
 ```
